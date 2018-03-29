@@ -3,16 +3,19 @@
     <el-dialog title="注册" :visible.sync="dialogFormVisible" @close="hide" >
       <el-form :model="form">
         <el-form-item label="用户名:" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
+          <el-input v-model="form.name" auto-complete="off" placeholder="请输入您的用户名"></el-input>
         </el-form-item>
-		<el-form-item label="邮箱:" :label-width="formLabelWidth">
-          <el-input v-model="form.email" auto-complete="off"></el-input>
+		    <el-form-item label="邮箱:" :label-width="formLabelWidth">
+          <el-input v-model="form.email" auto-complete="off" placeholder="请输入您的邮箱"></el-input>
+          <p>{{form.emailError}}</p>
         </el-form-item>
         <el-form-item label="密码:" :label-width="formLabelWidth">
-          <el-input type="password" v-model="form.pass" auto-complete="off"></el-input>
+          <el-input type="password" v-model="form.pass" auto-complete="off" placeholder="密码不得低于6位"></el-input>
+          <p>{{form.passError}}</p>
         </el-form-item>
         <el-form-item label="确认密码:" :label-width="formLabelWidth">
-          <el-input type="password" v-model="form.comPass" auto-complete="off"></el-input>
+          <el-input type="password" v-model="form.comPass" auto-complete="off" placeholder="再次重复上面的密码"></el-input>
+          <p>{{form.comPassError}}</p>
         </el-form-item>
 		<el-form-item label="身份:" :label-width="formLabelWidth">
           <el-radio v-model="form.role" label="student" auto-complete="off">学生</el-radio>
@@ -36,7 +39,10 @@ export default {
 		email: '',
         pass: '',
         comPass: '',
-		role: ''
+        emailError:'',
+        passError:'',
+        comPassError:'',
+		    role: 'student'
       },
       formLabelWidth: '90px'
     }
@@ -48,7 +54,7 @@ export default {
         return this.regShow;
       },
       set:function(){}
-    }   
+    }
   },
   methods:{
     hide(){
@@ -60,19 +66,25 @@ export default {
       var pwd = this.form.pass
       var repwd = this.form.comPass
       var role = this.form.role
-      if (name === '') {
-        alert('用户名不能为空！')
-      }else if(email === ''){
-          alert('邮箱不能为空！')
-      }else if (pwd === '') {
-            alert('密码不能为空！')
-      }else if(pwd !== repwd) {
-              alert('两次密码不一致！')
-      }
-	  
-	  
-
-      if (name !== '' && email !== '' && pwd !== '' && pwd === repwd) {
+      var reg=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/   //邮箱验证
+      var reg1= /^[a-zA-Z0-9_-]+$/;              //密码验证
+      if(email.trim() && pwd.trim() &&repwd.trim()&&email.trim().length>6 && pwd.trim().length>6&&repwd.trim().length>6){
+        if(!reg.test(email)){
+            this.form.emailError = '邮箱格式错误'
+            return false
+        }
+        if(!reg1.test(pwd)){
+            this.form.passError = '密码格式错误'
+            return false
+        }
+        if(pwd!=repwd){
+            this.form.comPassError = '确认密码不同'
+            return false
+        }
+        //验证后
+        this.form.emailError=''
+        this.form.passError=''
+        this.form.comPassError=''
         this.$ajax.post('/users/register', {
           username: name,
           email: email,
@@ -82,13 +94,12 @@ export default {
         .then((response) => {
           if (response.data.status === '1000') {
             alert(JSON.stringify(response.data.msg))
-			this.form.name = ''
-	  this.form.email = ''
-	  this.form.pwd = ''
-	  this.form.repwd = ''
-	  this.form.role = ''
-            var url = '../user.html?username=' + response.data.user.username + '&email=' + response.data.user.email + ''
-            window.open(url, 'newwindow')
+            this.form.name = ''
+            this.form.email = ''
+            this.form.pwd = ''
+            this.form.repwd = ''
+            this.form.role = ''
+             this.$router.push({path: '/UserInfo',query: { username: response.data.user.username }})
           }
           if (response.data.status === '1001') {
             alert(JSON.stringify(response.data.err))
@@ -99,6 +110,21 @@ export default {
         .catch((err) => {
           console.error(err)
         })
+      }
+      //验证不成功的提示
+      else{
+        if(email.trim().length<6){
+          this.form.emailError = '邮箱格式错误'
+        }
+        if(pwd.trim().length<6){
+          this.form.passError = '密码格式错误'
+        }
+        if(repwd.trim().length<6 && pwd==repwd){
+          this.form.comPassError = '确认密码格式错误'
+        }
+        if(repwd.trim().length<6&&pwd!=repwd){
+          this.form.comPassError = '确认密码不同'
+        }
       }
     }
   }
