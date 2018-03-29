@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="/static/js/phaser.min.js"></script>
+  <script src="/static/js/vue.js"></script>
+  <script src="/static/js/run.js"></script>
+  <script src="/static/js/ruler.js"></script>
+  <script src="/static/js/step.js"></script>
+  <script src="/static/js/public.js"></script>
+  <script src="/static/js/turn.js"></script>
+  <script src="/static/js/collision.js"></script>
+  <script src="/static/js/state.js"></script>
+  <script src="/static/js/initData.js"></script>
+  <style>
+    body{
+      margin:0;
+      padding: 0;
+    }
+    #container{
+      float: left;     
+    }
+    #inp textarea{
+      font-size: 30px;
+    }
+  </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="inp">      
+      <textarea  id="ta" cols="40" rows="20" v-model='taValue'></textarea>
+        <input  type="button" :value="runName" @click="start">
+        <input  type="button" value="reset" @click="reset">
+    </div>
+<script>
+
+var game = new Phaser.Game(600,720,Phaser.AUTO,'container',loadState);
+ var levelNum = 2;            //当前关卡
+  var runObj = null;
+  var panda = {
+    obj:null,
+    walk : null
+  }
+  var turtle = {
+    obj : null,
+    walk : null,
+    xOnoff : false,
+    awayX : 0,
+    awayY : 0,
+    rOnoff : false,
+    awayR : 0,
+    stepOnoff : false
+  }
+  var arr;
+  var island;
+  var aa;
+  var bb;
+  var walk;
+  var drown;
+  var ruler;
+  var rulerBase;
+  var banana;
+  var bridge;
+  var disObj;
+  var circle;
+  var pointer;  
+  var inputDis;                //用户输入的距离(绝对值)
+  var inputSym;                //用户输入距离的符号
+  var x;                       //储存x坐标
+  var y;                       //储存y坐标
+  var num = 0;                 //执行每行代码计数
+  var colliOnoff = false;      //灌木碰撞检测开关
+  var overlOnoff = true;       //香蕉碰撞检测开关
+  var rulerOnoff = false;
+  var disOnoff = false;
+  var lineOnoff = false;       //每行代码执行开关
+  var conStepOnoff = false;    //停止step的监控开关
+  var bananaOnoff = true; 
+  var testOnoff = false;       //代码执行后判断开关     
+  var runOnoff = false;        //代码是否执行标志 
+  var soundManager;   
+  var eatAudio;
+  var walkAudio;   
+ 
+  game.state.add('loadState',loadState);
+  game.state.add('state',state);
+  //game.state.start('one');
+           
+  var vm = new Vue({
+    el:'#inp',
+    data:{
+      taValue:taValueArr[levelNum],
+      runName:'start',
+    },
+    methods:{
+      start(){
+        if(runOnoff == false){
+          num = 0;
+          runOnoff = true;
+          this.runName = 'stop';
+          codeArr('ta');          
+        }else{
+          num = 0;                 //执行每行代码计数
+          panda.obj.body.velocity.set(0,0);
+          if(turtle.obj){
+            turtle.obj.body.velocity.set(0,0);
+          }
+          colliOnoff = false;      //灌木碰撞检测开关
+          overlOnoff = true;       //香蕉碰撞检测开关
+          conStepOnoff = false;    //停止step的监控开关
+          bananaOnoff = true;
+          lineOnoff = false; 
+          testOnoff = false;       //代码执行后判断开关
+          turtle.rOnoff = false;     
+          turtle.xOnoff = false;
+          turtle.stepOnoff = false;   
+          soundManager.stopAll();          
+          rebulidObj();
+          runOnoff = false;        //代码是否执行标志
+          vm.runName = 'start';           
+        }                 
+      },
+      reset(){
+        this.taValue = taValueArr[levelNum];
+      }
+    }
+  })
+
+</script>
+</body>
+</html>
+      
