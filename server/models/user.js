@@ -104,10 +104,10 @@ pool.getConnection(function(err, connection) {
     };
 
     //根据邮箱名得到用户信息
-    User.prototype.getUserByEmail = function (email, callback) {
+    User.prototype.getUserByEmail = function (role, email, callback) {
         
-        sql = eval("sqlMap." + this.role + ".getUserByEmail_Sql");
-        connection.query(sql, [email],function (err, result) {
+        sql = eval("sqlMap." + role + ".getUserByEmail_Sql");
+        connection.query(sql, [email], function (err, result) {
             if (err) {
                 console.log(" getUserByEmail Error: " + err.message);
                 return;

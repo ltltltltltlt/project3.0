@@ -143,14 +143,13 @@ router.post('/login', function(req, res) {
     userRole = Admin;  
   }  
 
-  userRole.prototype.getUserByUsername(params.role, params.username, function (err, result) {
+  userRole.prototype.getUserByEmail(params.role, params.email, function (err, result) {
        
     //检查用户是否存在
     if(result == '')
     {
-      res.locals.error= '用户名有误';
-      console.log('用户名有误');
-      res.json({'status':'2001','msg':'用户名有误'});
+      res.locals.error= '邮箱有误';
+      res.json({'status':'2001','msg':'邮箱有误'});
     } else {
 
         //对密码进行加密
@@ -162,7 +161,6 @@ router.post('/login', function(req, res) {
       //检查密码是否正确
       if(result[0].password != pwd){
         res.locals.error = '密码有误';
-        console.log('密码有误');
         res.json({'status':'2002','msg':'密码有误'});
       }
       else{
