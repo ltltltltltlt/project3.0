@@ -20,13 +20,10 @@ function state(){
   var riverOnoff = true;               //panda与河流碰撞开关
   var lakeOnoff = true;                //panda与lake碰撞开关
   var allCollOnoff = true;             //所有的碰撞检测完后再测试是否通关
-  var objName;
+  var objName = {a:1};
   var bMap;
   var lMap;
   var shade;
-  
-  
-  
   
   this.init = function(){   
     game.add.image(0,0,'progressImg');
@@ -81,9 +78,13 @@ function state(){
     if(d.lM == true){
       lMap = game.add.sprite(0,0,'lake');
       game.physics.enable(lMap, Phaser.Physics.ARCADE);
+      lMap.inputEnabled = true;
+      lMap.events.onInputOver.add(hideName);
     }else{
       bMap = game.add.sprite(0,0,'bg');
       game.physics.enable(bMap, Phaser.Physics.ARCADE);
+      bMap.inputEnabled = true;         
+      bMap.events.onInputOver.add(hideName); 
     }
 
     if(d.iL == true){
@@ -159,6 +160,8 @@ function state(){
         bu.anchor.setTo(0.5,0.5);
         bu.body.immovable = true;
         bu.body.setSize(33, 36, 12, 0);
+        // bu.inputEnabled = true;         
+        // bu.events.onInputOver.add(hideName); 
       }
     }
   
@@ -201,9 +204,12 @@ function state(){
     walkAudio = game.add.audio('walkAudio');
     
     game.physics.enable(ruler, Phaser.Physics.ARCADE);
+
+    // panda.obj.body.newVelocity.set(0,100);
+    // game.add.tween(panda.obj.body).to( { y: 100 } )
     
   };
-  this.update = function(){    
+  this.update = function(){   
     if (overlOnoff == true) {
       //监控碰撞        
       game.physics.arcade.overlap(panda.obj, banana, collisionHandler, null, this);                     
@@ -434,7 +440,7 @@ function rebulidObj(){
   game.world.bringToTop(ruler);         //将尺子带到这个的顶部 覆盖住新创建的panda
 }
 function showName(obj){
-  if(obj ==  panda){
+  if(obj ==  panda.obj){
     objName = game.add.text(obj.x-40,obj.y-54,obj.name);
   }else{
     objName = game.add.text(obj.x-50,obj.y-43,obj.name);
@@ -443,8 +449,12 @@ function showName(obj){
   objName.fill = '#FFFFFF';
 }
 function hideName(){
-  if(objName){
-    objName.destroy();
+  try {
+    if(objName){
+      objName.destroy();
+    }
+  } catch (error) {
+    
   }
 }
 function pandaMsg(d){
@@ -463,6 +473,9 @@ function pandaMsg(d){
   panda.obj.input.useHandCursor = true;              
   panda.obj.events.onInputOver.add(showName,this); 
   panda.obj.events.onInputOut.add(hideName);
+
+  // panda.obj.body.velocity.x = 10;
+  // panda.obj.body.velocity.y = 10; 
   //panda.obj.pivot.y =100;
   //alert([panda.obj.body.x,panda.obj.body.y,panda.obj.width,panda.obj.height,])
 }

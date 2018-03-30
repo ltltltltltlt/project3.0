@@ -39,7 +39,8 @@ function startStep(obj,symbol){
   var disSym = symbol;   //用户输入数值的符号
   var angSym = -getSymbol(angle);
   var tan = Math.tan(obj.rotation);
-  var num = disSym*angSym*380;
+  var speed = 190;   //行走速度
+  var num = disSym*angSym*speed;     
   if(obj == panda.obj){
     panda.walk.play();
   }else{

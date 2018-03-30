@@ -14,7 +14,9 @@
         <el-radio v-model="form.role" label="student" auto-complete="off">学生</el-radio>
         <el-radio v-model="form.role" label="teacher" auto-complete="off">老师</el-radio>
         <el-radio v-model="form.role" label="admin" auto-complete="off">管理员</el-radio>
+		<el-checkbox v-model="form.isRem" auto-complete="off" >记住登录</el-checkbox>
        </el-form-item>
+	    
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="login">确 定</el-button>
@@ -32,7 +34,8 @@ export default {
         pass: '',
         emailError:'',
         passError:'',
-		role: 'student'
+		role: 'student',
+		isRem: true
       },
       formLabelWidth: '90px'
     }
@@ -51,9 +54,18 @@ export default {
       this.$emit('loginReceive');
     },
 	login () {
+	 
+	 var session_val = window.sessionStorage.getItem("email");
+		  alert(session_val);
+	  if(session_val){
+	   console.log(session_val);
+	   alert(session_val);
+	  }
+	 
 	  var email = this.form.email
       var pwd = this.form.pass
       var role = this.form.role
+	  var isRem = this.form.isRem
       var reg=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/   //邮箱正则表达式
       var reg1= /^[a-zA-Z0-9_-]+$/       //密码验证表达式
       if(email.trim() && pwd.trim() &&email.trim().length>6 && pwd.trim().length>6){
@@ -71,12 +83,13 @@ export default {
           this.$ajax.post('/users/login', {
                             email: email,
                             password: pwd,
-                            role: role
-                            /* chbRem: chbRem */
+                            role: role,
+                            isRem: isRem
           }, {emulateJSON: true}).then((response) => {
           if (response.data.status === '2000') {
+		     alert(JSON.stringify(response.data.session))
              alert(JSON.stringify(response.data.msg))
-             this.$router.push({path: '/UserInfo',query: { username: response.data.user.username }})
+             this.$router.push({path: '/Course',query: { username: response.data.user.username }})
 
           }
           if (response.data.status === '2001') {

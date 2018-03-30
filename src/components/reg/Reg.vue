@@ -36,7 +36,7 @@ export default {
     return{
       form: {
         name: '',
-		email: '',
+		    email: '',
         pass: '',
         comPass: '',
         emailError:'',
@@ -99,7 +99,7 @@ export default {
             this.form.pwd = ''
             this.form.repwd = ''
             this.form.role = ''
-             this.$router.push({path: '/UserInfo',query: { username: response.data.user.username }})
+             this.$router.push({path: '/Course',query: { username: response.data.user.username }})
           }
           if (response.data.status === '1001') {
             alert(JSON.stringify(response.data.err))

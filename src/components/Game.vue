@@ -8,7 +8,7 @@
     <div id="nav">
       <!-- 中间显示关卡 -->
       <div id="level">
-        <h1>第{{level}}关挑战</h1>
+        <h1>第{{levelNum}}关挑战</h1>
       </div>
       <!-- 右边菜单栏 -->
       <div class="menu">
@@ -28,12 +28,7 @@
 	<div>
 	   <iframe src="/static/html/game.html" width="100%" height="1000px" frameborder="0" id="external-frame"></iframe>
 	</div>
-    <!-- <div id="container"> </div>
-    <div id="inp">
-          <textarea  id="ta" cols="40" rows="20" v-model='taValue'></textarea>
-            <input   id = "startBtn" type="button" :value="runName" @click="start">
-            <input  type="button" value="reset" @click="reset">
-     </div> -->
+    
 </div>
 </template>
 
@@ -42,14 +37,13 @@
 export default {
   data(){
     return{
-      level:0,
+      levelNum:levelNum,
       loginReg:true,
       loginShow:false,
       regShow:false,
       canvasHeight:700,
 
-      /*taValue:taValueArr[levelNum],
-      runName:'start',*/
+      
     }
   },
   methods:{
@@ -67,39 +61,10 @@ export default {
     },
 
 
-    /*start(){
-            if(runOnoff == false){
-              num = 0;
-              runOnoff = true;
-              this.runName = 'stop';
-              codeArr('ta');
-            }else{
-              num = 0;                 //执行每行代码计数
-              panda.obj.body.velocity.set(0,0);
-              if(turtle.obj){
-                turtle.obj.body.velocity.set(0,0);
-              }
-              colliOnoff = false;      //灌木碰撞检测开关
-              overlOnoff = true;       //香蕉碰撞检测开关
-              conStepOnoff = false;    //停止step的监控开关
-              bananaOnoff = true;
-              lineOnoff = false;
-              testOnoff = false;       //代码执行后判断开关
-              turtle.rOnoff = false;
-              turtle.xOnoff = false;
-              turtle.stepOnoff = false;
-              soundManager.stopAll();
-              rebulidObj();
-              runOnoff = false;        //代码是否执行标志
-              //vm.runName = 'start';
-            }
-          },
-          reset(){
-            this.taValue = taValueArr[levelNum];
-          }*/
+    
   },
   mounted(){
-    //game = new Phaser.Game(600,720,Phaser.AUTO,'canvas',loadState);
+   
 	
   }
 }

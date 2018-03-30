@@ -9,10 +9,7 @@ var newUser;
 var userRole;
 
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+
 
 
 //注册新用户
@@ -131,7 +128,7 @@ router.post('/login', function(req, res) {
   var params = req.body;
   console.log(params);
 
-  isRem = params.chbRem;
+  isRem = params.isRem;
   console.log(isRem);
 
   //判断要登录的身份是学生，老师还是管理员
@@ -167,13 +164,12 @@ router.post('/login', function(req, res) {
         //如果勾选了自动登录，将username的值写入cookie,有效时间30s
         if(isRem)
         {
-          res.cookie('islogin', result[0].username, { maxAge: 30000 });
+          res.cookie('islogin', result[0].email, { maxAge: 30000 });
         }
 
-        // res.locals.username = result[0].username;
-        // req.session.username = res.locals.username;
-        // console.log(req.session.username);
-        res.json({'user':result[0],'status':'2000','msg':'登录成功'});
+         res.locals.email = result[0].email;
+         req.session.email = res.locals.email;
+        res.json({'user':result[0],'status':'2000','msg':'登录成功','session':req.session.email});
       }
     }
     

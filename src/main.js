@@ -10,30 +10,12 @@ import Login from './components/login'
 import axios from 'axios'
 Vue.prototype.$ajax = axios
 
-//import Phaser from '../static/js/phaser.min.js'
-//import vue from '../static/js/vue.js'
-//import run from '../static/js/run.js'
-//import ruler from '../static/js/ruler.js'
-//import step from '../static/js/step.js'
-//import public1 from '../static/js/public.js'
-//import turn from '../static/js/turn.js'
-//import collision from '../static/js/collision.js'
-//import state from '../static/js/state.js'
-//import initData from '../static/js/initData.js'
+
 
 Vue.use(Login)
 Vue.use(Reg)
 Vue.use(ElementUI);
-//Vue.use(Phaser);
-//Vue.use(vue);
-//Vue.use(run);
-//Vue.use(ruler);
-//Vue.use(step);
-//Vue.use(public1);
-//Vue.use(turn);
-//Vue.use(collision);
-//Vue.use(state);
-//Vue.use(initData);
+
 
 Vue.config.productionTip = false
 
