@@ -1,4 +1,3 @@
-var mysql = require('mysql');
 var sqlMap = require('../sqlMap');
 var pool = require('../dbPool.js');
 
@@ -18,11 +17,6 @@ function User(user,role){
     this.role = role;
 };
 
-// function User(username,email,pwd){
-//     this.username = username;
-//     this.email = email;
-//     this.pwd = pwd;
-// };
 
 
 module.exports = User;

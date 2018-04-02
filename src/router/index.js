@@ -5,6 +5,7 @@ import Home from '@/components/Home'
 import Game from '@/components/Game'
 import UserInfo from '@/components/UserInfo'
 import Course from '@/components/Course'
+import Personal from '@/components/Personal'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/Course',
       name: 'Course',
       component: Course
+    },
+	{
+      path: '/Personal',
+      name: 'Personal',
+      component: Personal
     },
   ]
 })

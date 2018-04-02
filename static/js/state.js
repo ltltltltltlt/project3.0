@@ -345,13 +345,18 @@ function state(){
         if(c == true){
           vm.taValue = taValueArr[levelNum+1];
           levelNum++;
+		  //改变父页面的导航栏
+		  var papa = window.parent.document.getElementById("level").getElementsByTagName("h1")[0].getElementsByTagName("span")[0];
+		  papa.innerHTML = levelNum;
+		  
           closeOnoff();
           if(turtle.obj){
             turtle.obj = null;
-          }         
+          }     	  
           game.state.remove('state');
-          game.state.add('state',state);
-          game.state.start('loadState');          
+          game.state.add('state',state); 
+          game.state.start('loadState');   
+           
         }else{
           vm.runName = 'start';
           if(objName){

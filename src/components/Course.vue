@@ -16,7 +16,11 @@
           </el-col>
       </el-row>
     </div>
-
+    <div class="link_selfPage">
+        <router-link to="/Personal">
+            <div >我是个a链接，点击我查看个人主页</div>
+        </router-link>
+	</div>
     <div class="welcom">
       <el-row>
         <el-col :span="24">
@@ -62,6 +66,7 @@
                     <div class="active-subtitle">第一部分基本原理</div>
                   </div>
                 </a>
+				
               </div>
             </section>
           </div>
@@ -83,11 +88,20 @@
 	export default{
 	  data(){
 	    return{
-	      username: this.$route.query.username,
+	      username: '',
+	      role:'',
+          email:'',
+          level:''
 	    }
 	  },
+    created(){
+       this.username = sessionStorage.username;
+       this.role = sessionStorage.role;
+       this.email = sessionStorage.email;
+       this.level = sessionStorage.level;
+    },
     methods:{
-      
+
     }
 	}
 </script>

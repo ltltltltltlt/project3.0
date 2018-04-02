@@ -27,7 +27,7 @@ router.post('/register', function(req, res, next) {
 
 
 
-  
+
   //判断要注册的身份是学生，老师还是管理员
   if(params.role == 'student'){
     //调用用户的构造函数
@@ -39,7 +39,7 @@ router.post('/register', function(req, res, next) {
 
     });
     userRole = Student;
-   
+
   }else if(params.role == 'teacher'){
     //调用用户的构造函数
      newUser = new Teacher({
@@ -50,7 +50,7 @@ router.post('/register', function(req, res, next) {
 
     });
     userRole = Teacher;
-   
+
   }else if(params.role == 'admin'){
     //调用用户的构造函数
      newUser = new Admin({
@@ -61,10 +61,10 @@ router.post('/register', function(req, res, next) {
 
     });
     // userRole = Admin;
-    
+
   }
 
-  
+
 
 
   //检查用户名是否已被注册
@@ -88,17 +88,17 @@ router.post('/register', function(req, res, next) {
                     res.json({'status':'1002','err':err});
                     return;
                 }else{
-                  
+
                   //保存新用户信息
                   newUser.save(function (err, result) {
-                    if (err) {             
+                    if (err) {
                       res.locals.error = err;
                       res.sendStatus(404);
                       return;
                     }
-                    if (result.insertId > 0) {  
+                    if (result.insertId > 0) {
                       res.locals.success = '注册成功';
-                    } else {   
+                    } else {
                       res.locals.error = err;
                       return;
                     }
@@ -114,7 +114,7 @@ router.post('/register', function(req, res, next) {
                 }
             });
 
-            
+
 
         }
 
@@ -133,19 +133,19 @@ router.post('/login', function(req, res) {
 
   //判断要登录的身份是学生，老师还是管理员
   if(params.role == 'student'){
-    userRole = Student;  
-  }else if(params.role == 'teacher'){ 
-    userRole = Teacher;  
+    userRole = Student;
+  }else if(params.role == 'teacher'){
+    userRole = Teacher;
   }else if(params.role == 'admin'){
-    userRole = Admin;  
-  }  
+    userRole = Admin;
+  }
 
   userRole.prototype.getUserByEmail(params.role, params.email, function (err, result) {
-       
+
     //检查用户是否存在
     if(result == '')
     {
-      res.locals.error= '邮箱有误';
+      //res.locals.error= '邮箱有误';
       res.json({'status':'2001','msg':'邮箱有误'});
     } else {
 
@@ -157,24 +157,24 @@ router.post('/login', function(req, res) {
 
       //检查密码是否正确
       if(result[0].password != pwd){
-        res.locals.error = '密码有误';
+        //res.locals.error = '密码有误';
         res.json({'status':'2002','msg':'密码有误'});
       }
       else{
-        //如果勾选了自动登录，将username的值写入cookie,有效时间30s
+        //如果勾选了自动登录，将username的值写入cookie,有效时间3天，即3*24*60*60*1000
         if(isRem)
         {
-          res.cookie('islogin', result[0].email, { maxAge: 30000 });
+          res.cookie('login_name', result[0].username, { maxAge: 259200000 });
         }
 
-         res.locals.email = result[0].email;
-         req.session.email = res.locals.email;
-        res.json({'user':result[0],'status':'2000','msg':'登录成功','session':req.session.email});
+         req.session.islogin = true;
+         req.session.name = result[0].username;
+         res.json({'user':result[0],'status':'2000','msg':'登录成功'});
       }
     }
-    
+
   });
- 
+
 
 
 });
@@ -182,13 +182,16 @@ router.post('/login', function(req, res) {
 
 //注销登录
 router.get('/logout',function(){
-  
+  req.session.islogin = false;
+  req.session.name = null;
+  req.cookie.login_name = null;
+  res.json({'msg':'退出成功'});
 });
 
 
 //修改用户个人信息
 router.post('/users/updateInformation',function(){
-  
+
 });
 
 module.exports = router;

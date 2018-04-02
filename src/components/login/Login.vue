@@ -14,9 +14,9 @@
         <el-radio v-model="form.role" label="student" auto-complete="off">学生</el-radio>
         <el-radio v-model="form.role" label="teacher" auto-complete="off">老师</el-radio>
         <el-radio v-model="form.role" label="admin" auto-complete="off">管理员</el-radio>
-		<el-checkbox v-model="form.isRem" auto-complete="off" >记住登录</el-checkbox>
+		    <el-checkbox v-model="form.isRem" auto-complete="off" >记住登录</el-checkbox>
        </el-form-item>
-	    
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="login">确 定</el-button>
@@ -34,8 +34,8 @@ export default {
         pass: '',
         emailError:'',
         passError:'',
-		role: 'student',
-		isRem: true
+		    role: 'student',
+		    isRem: true
       },
       formLabelWidth: '90px'
     }
@@ -54,18 +54,12 @@ export default {
       this.$emit('loginReceive');
     },
 	login () {
-	 
-	 var session_val = window.sessionStorage.getItem("email");
-		  alert(session_val);
-	  if(session_val){
-	   console.log(session_val);
-	   alert(session_val);
-	  }
-	 
-	  var email = this.form.email
+
+
+	    var email = this.form.email
       var pwd = this.form.pass
       var role = this.form.role
-	  var isRem = this.form.isRem
+	    var isRem = this.form.isRem
       var reg=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/   //邮箱正则表达式
       var reg1= /^[a-zA-Z0-9_-]+$/       //密码验证表达式
       if(email.trim() && pwd.trim() &&email.trim().length>6 && pwd.trim().length>6){
@@ -87,18 +81,31 @@ export default {
                             isRem: isRem
           }, {emulateJSON: true}).then((response) => {
           if (response.data.status === '2000') {
-		     alert(JSON.stringify(response.data.session))
              alert(JSON.stringify(response.data.msg))
-             this.$router.push({path: '/Course',query: { username: response.data.user.username }})
+              this.form.email = ''
+              this.form.pass = ''
+
+              //sessionStorage只能储存字符串，储存为对象的话就不能修改了
+              sessionStorage.id = response.data.user.id
+			  sessionStorage.username = response.data.user.username
+			  sessionStorage.email = response.data.user.email
+			  sessionStorage.icon = response.data.user.icon
+			  sessionStorage.level = response.data.user.level
+			  sessionStorage.star = response.data.user.star
+			  sessionStorage.sex = response.data.user.sex
+              sessionStorage.role = role
+             this.$router.push({path: '/Course'})
 
           }
-          if (response.data.status === '2001') {
+		      //邮箱有误
+          else if (response.data.status === '2001') {
             alert(JSON.stringify(response.data.msg))
           }
-          if (response.data.status === '2002') {
+		  //密码有误
+          else if (response.data.status === '2002') {
             alert(JSON.stringify(response.data.msg))
           }
-          if (response.data.status === '2003') {
+          else if (response.data.status === '2003') {
             alert(JSON.stringify(response.data.msg))
           }
         }).catch((err) => {

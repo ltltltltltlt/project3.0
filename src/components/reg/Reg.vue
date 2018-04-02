@@ -3,7 +3,8 @@
     <el-dialog title="注册" :visible.sync="dialogFormVisible" @close="hide" >
       <el-form :model="form">
         <el-form-item label="用户名:" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off" placeholder="请输入您的用户名"></el-input>
+          <el-input v-model="form.username" auto-complete="off" placeholder="请输入您的用户名"></el-input>
+          <p>{{form.usernameError}}</p>
         </el-form-item>
 		    <el-form-item label="邮箱:" :label-width="formLabelWidth">
           <el-input v-model="form.email" auto-complete="off" placeholder="请输入您的邮箱"></el-input>
@@ -35,13 +36,14 @@ export default {
   data(){
     return{
       form: {
-        name: '',
-		    email: '',
+        username: '',
+		email: '',
         pass: '',
         comPass: '',
-        emailError:'',
-        passError:'',
-        comPassError:'',
+        usernameError: '',
+        emailError: '',
+        passError: '',
+        comPassError: '',
 		    role: 'student'
       },
       formLabelWidth: '90px'
@@ -61,7 +63,7 @@ export default {
       this.$emit('regReceive');
     },
 	register () {
-	  var name = this.form.name
+	  var username = this.form.username
       var email = this.form.email
       var pwd = this.form.pass
       var repwd = this.form.comPass
@@ -86,7 +88,7 @@ export default {
         this.form.passError=''
         this.form.comPassError=''
         this.$ajax.post('/users/register', {
-          username: name,
+          username: username,
           email: email,
           password: pwd,
           role: role
@@ -94,12 +96,32 @@ export default {
         .then((response) => {
           if (response.data.status === '1000') {
             alert(JSON.stringify(response.data.msg))
-            this.form.name = ''
+            this.form.username = ''
             this.form.email = ''
             this.form.pwd = ''
             this.form.repwd = ''
             this.form.role = ''
-             this.$router.push({path: '/Course',query: { username: response.data.user.username }})
+            
+			//sessionStorage只能储存字符串，储存为对象的话就不能修改了
+			sessionStorage.id = response.data.user.id
+			sessionStorage.username = response.data.user.username
+			sessionStorage.email = response.data.user.email
+			sessionStorage.icon = response.data.user.icon
+			sessionStorage.level = response.data.user.level
+			sessionStorage.star = response.data.user.star
+			sessionStorage.sex = response.data.user.sex
+			sessionStorage.role = role
+			console.log(sessionStorage.id);
+			console.log(sessionStorage.username);
+			console.log(sessionStorage.email);console.log(sessionStorage.icon);
+			
+			console.log(sessionStorage.level);
+			console.log(sessionStorage.star);
+			console.log(sessionStorage.sex);
+			console.log(sessionStorage.role);
+            this.$router.push({path: '/Course'})
+			
+			
           }
           if (response.data.status === '1001') {
             alert(JSON.stringify(response.data.err))

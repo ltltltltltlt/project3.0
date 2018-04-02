@@ -8,7 +8,7 @@
     <div id="nav">
       <!-- 中间显示关卡 -->
       <div id="level">
-        <h1>第{{levelNum}}关挑战</h1>
+        <h1>第<span>{{levelNum}}</span>关挑战</h1>
       </div>
       <!-- 右边菜单栏 -->
       <div class="menu">
@@ -32,18 +32,16 @@
 </div>
 </template>
 
-
 <script>
 export default {
   data(){
     return{
-      levelNum:levelNum,
+	  levelNum:1,
       loginReg:true,
       loginShow:false,
       regShow:false,
       canvasHeight:700,
-
-      
+    
     }
   },
   methods:{

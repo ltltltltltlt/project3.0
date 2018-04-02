@@ -7,6 +7,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Reg from './components/reg'
 import Login from './components/login'
+import PerEdit from './components/perEdit'
+import PerEditPass from './components/perEditPass'
+import Picture from './components/picture'
 import axios from 'axios'
 Vue.prototype.$ajax = axios
 
@@ -14,6 +17,9 @@ Vue.prototype.$ajax = axios
 
 Vue.use(Login)
 Vue.use(Reg)
+Vue.use(PerEdit)
+Vue.use(PerEditPass)
+Vue.use(Picture)
 Vue.use(ElementUI);
 
 

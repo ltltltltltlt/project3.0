@@ -10,6 +10,7 @@ var staticRoute = require('express-static');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var Info = require('./routes/Info');
 
 var app = express();
 
@@ -38,9 +39,11 @@ for(var i = 0;i < 100000;i ++){
 
 //cookie
 app.use(cookieParser());
-//session
+//设置session
 app.use(cookieSession({
-  keys: arr
+  keys: arr,
+  cookie: {maxAge:300000},    //cookie时长5分钟
+  resave: true,       //强制将session保存到session store中
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -48,6 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 // app.use('/api',users);
 app.use('/users', users);
+app.use('/Info',Info);
 
 
 // catch 404 and forward to error handler

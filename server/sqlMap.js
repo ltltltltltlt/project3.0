@@ -9,7 +9,7 @@ var sqlMap = {
     //用户
     student: {
         //插入一条数据到数据库
-        insertUser_Sql : "INSERT INTO student(id,username,email,password) VALUES(0,?,?,?)",
+        insertUser_Sql : "INSERT INTO student(id,username,email,password,icon,level,star,sex) VALUES(0,?,?,?,'static/img/avatar00.png','1','0','male')",
 
         //根据用户名得到已注册的用户名数量
         getUserNumByUsername_Sql : "SELECT COUNT(1) AS num FROM student WHERE username = ?",
@@ -21,7 +21,16 @@ var sqlMap = {
         getUserByEmail_Sql : "SELECT * FROM student WHERE email = ?",
 
         //根据用户名得到用户信息
-        getUserByUsername_Sql : "SELECT * FROM student WHERE username = ?"      
+        getUserByUsername_Sql : "SELECT * FROM student WHERE username = ?",
+
+        //保存用户头像
+        saveAlt_Sql : "UPDATE student SET icon = ? WHERE username = ?",	
+
+        //修改个人资料
+        updateInfo_Sql : "UPDATE student SET username = ? , email = ? , sex = ? WHERE username = ?",
+
+        //修改密码
+        updatePass_Sql : "UPDATE student SET password = ? WHERE username = ?",		
     },
     //老师
     teacher: {
