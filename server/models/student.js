@@ -3,8 +3,6 @@ var sqlMap = require('../sqlMap');
 var pool = require('../dbPool.js');
 var User = require('./user');
 
-var defaultSex = 'male';    //默认性别是男
-
 pool.on('connection', function(connection) {
     //让session每次自增长1
     connection.query('SET SESSION auto_increment_increment=1');
@@ -14,12 +12,6 @@ pool.on('connection', function(connection) {
 //学生类
 function Student(student){
     User.call(this,student,'student');
-    this.sex = defaultSex;
-    this.age = null;
-    this.classNum = null;
-    // this.username = username;
-    // this.email = email;
-    // this.pwd = pwd;
 };
 
 module.exports = Student;

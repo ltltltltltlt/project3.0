@@ -39,7 +39,7 @@
         <el-col :span="8">
         <div class="continue-module">
           <div class="grid-content bg-purple-light continue-bg">
-            <router-link to="/Hello">
+            <router-link to="" @click.native="backToGame">
               <div class="continue-game">
                 <span style="font-size: 29px;">继续游戏</span>
               </div>
@@ -101,11 +101,37 @@
        this.level = sessionStorage.level;
     },
     methods:{
+       backToGame(){
+		   var that = this;
+		   //先判断是否有登录
+		   if(sessionStorage.username !== 'null' || sessionStorage.username !== 'undefined'){
 
-    }
-	}
+				//已登录，就调用后台查询已经保存的关卡数,就跳到保存好的关卡数
+
+				this.$ajax.post('/Info/queryChapter', {
+							  username: sessionStorage.username,
+							  role: sessionStorage.role
+				}, {emulateJSON: true}).then((response) => {
+				if (response.data.status === '1') {
+				   //获取该用户的游戏的数据，保存到sessionStorage里面
+				   alert(JSON.stringify(response.data.msg));
+				   sessionStorage.chapterCode = response.data.chapterCode;
+				   alert(sessionStorage.chapterCode);
+				   sessionStorage.levelNum = response.data.chapterNum;
+				   alert(sessionStorage.levelNum);
+				   this.$router.push({path: '/Hello'});
+				}
+				if (response.data.status === '-1') {
+				  //获取不到该用户的游戏的数据
+				  alert(JSON.stringify(response.data.msg))
+				}
+			  }).catch((err) => {
+				console.error(err)
+			  })	
+			  
+	        }					
+	    }
+    },
+}
 </script>
 
-<style>
-
-</style>

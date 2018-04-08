@@ -86,10 +86,9 @@ router.post('/register', function(req, res, next) {
                 if (err) {
                     res.locals.error = err;
                     res.json({'status':'1002','err':err});
-                    return;
                 }else{
 
-                  //保存新用户信息
+                  //保存新用户信息，头像，等级，星星数目以及性别都默认设置为初始值
                   newUser.save(function (err, result) {
                     if (err) {
                       res.locals.error = err;
@@ -102,8 +101,17 @@ router.post('/register', function(req, res, next) {
                       res.locals.error = err;
                       return;
                     }
-                    //res.json({'status':'1000','success':'注册成功'});
+                   
 
+					//保存了新用户之后还要初始化代码表，插入相应的第一关和第一个关的默认代码
+					newUser.InitCodeByUsername(params.role, newUser.username, function(err,result){
+						if(err){
+							res.json({'status':'-1','err':err});
+						}
+					})
+					
+					 //res.json({'status':'1000','success':'注册成功'});
+					
                     //保存完直接登录
                     newUser.getUserByUsername(params.role, newUser.username, function (err, result) {
                       res.json({'user':result[0],'status':'1000','msg':'注册并登录成功'});
@@ -161,6 +169,7 @@ router.post('/login', function(req, res) {
         res.json({'status':'2002','msg':'密码有误'});
       }
       else{
+		  
         //如果勾选了自动登录，将username的值写入cookie,有效时间3天，即3*24*60*60*1000
         if(isRem)
         {
@@ -189,9 +198,5 @@ router.get('/logout',function(){
 });
 
 
-//修改用户个人信息
-router.post('/users/updateInformation',function(){
-
-});
 
 module.exports = router;

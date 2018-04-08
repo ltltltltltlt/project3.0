@@ -52,7 +52,6 @@ export default{
     this.$emit('editPassReceive');
   },
   editPass(){
-  console.log(this.form.pass)
     var pwd = this.form.pass
 	var npwd = this.form.newpass
 	var repwd = this.form.repass

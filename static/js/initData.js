@@ -1,5 +1,5 @@
 var taValueArr = [
-  'step 15','step 10','step 0','turn left\nstep 15','turn left\n','turn left\nstep 5','','turn -30\nstep 14','','step -5','',
+  'step 15','step 15','step 0','turn left\nstep 15','turn left\n','turn left\nstep 5','','turn -30\nstep 14','','step -5','',
   'turnTo banana\nstep 10','turnTo banana\nstep 15\nturnTo bridge','turtle.step 10','\nturtle.step 10\nstep 5','','turnTo ',
   'turtle.turn left','turtle.turnTo ','','','2.times ->\n   turn left\n   step 15','5.times ->\n    step 6\n    turn -38',
   '5.times ->\n   turn -60\n   ','','3.times ->\n   turn left\n   step 5\n   ','\n3.times ->\n    turtle.step 10\n    turtle.turn right',

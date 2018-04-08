@@ -49,7 +49,7 @@ pool.getConnection(function(err, connection) {
 
             //connection.release();
 
-            console.log("insertUser succeed");
+            console.log(" insertUser succeed");
             callback(err,result);
             
         });
@@ -118,7 +118,6 @@ pool.getConnection(function(err, connection) {
 
     //根据用户名得到用户信息
     User.prototype.getUserByUsername = function (role, username, callback) {
-        console.log(role);
         sql = eval("sqlMap." + role + ".getUserByUsername_Sql");
         connection.query(sql, [username], function (err, result) {
             if (err) {
@@ -134,6 +133,24 @@ pool.getConnection(function(err, connection) {
         });
         
     };
+	
+	
+	//初始化用户的代码表
+	User.prototype.InitCodeByUsername = function (role, username, callback) {
+		sql = eval("sqlMap." + role + ".InitCodeByUsername_Sql");
+        connection.query(sql, [role, username], function (err, result) {
+            if (err) {
+                console.log(" InitCodeByUsername Error: " + err.message);
+                return;
+            }
+
+            //connection.release();
+
+            console.log(" InitCodeByUsername succeed");
+            callback(err,result);
+          
+        });
+	}
 
 
     //释放连接

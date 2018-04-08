@@ -22,6 +22,24 @@ var sqlMap = {
 
         //根据用户名得到用户信息
         getUserByUsername_Sql : "SELECT * FROM student WHERE username = ?",
+		
+		//初始化用户的代码表
+		InitCodeByUsername_Sql : "INSERT INTO code(role, username, chapter, chapterCode) VALUES(?,?,'1','step 15')",
+		
+		//查询是否存在当前的关卡
+		GetNumByRoleUsernameChapter_Sql : "SELECT COUNT(*) AS num FROM code WHERE role = ? and username = ? and chapter = ?",
+		
+		//更新已存在关卡的代码
+        UpdateChapterCodeByRoleUsernameChapter_Sql : "UPDATE code SET chapterCode = ? WHERE role = ? and username = ? and chapter = ?",	
+		
+		//保存新关卡的代码
+		InsertCodeByRoleUsernameChapter_Sql : "INSERT INTO code(role, username, chapter, chapterCode) VALUES(?,?,?,?)",
+		
+		//由身份和用户名获得已过关卡的数量
+		getChapterNumByRoleUsername_Sql : "SELECT COUNT(*) AS num FROM code WHERE role = ? and username = ?",
+		
+		//由身份和用户名和关卡获得对应关卡的代码
+		getChapterCodeByRoleUsernameChapter_Sql : "SELECT chapterCode FROM code WHERE role = ? and username = ? and chapter = ?",
 
         //保存用户头像
         saveAlt_Sql : "UPDATE student SET icon = ? WHERE username = ?",	

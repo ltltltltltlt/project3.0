@@ -343,8 +343,11 @@ function state(){
           hideName();
         }
         if(c == true){
-          vm.taValue = taValueArr[levelNum+1];
+		  //levelNum从sessionStorage中读取到的话肯定是字符串类型，要转成数字类型
+		  var LNum = parseInt(levelNum) + 1;
+          vm.taValue = taValueArr[LNum];
           levelNum++;
+		  
 		  //改变父页面的导航栏
 		  var papa = window.parent.document.getElementById("level").getElementsByTagName("h1")[0].getElementsByTagName("span")[0];
 		  papa.innerHTML = levelNum;

@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="chrome">
   <title>Document</title>
+  <!-- 引入jquery-1.11.1.min.js这个包的原因是为了使用jquery中ajax，因为vue原来是没有ajax -->
+  <script src="/static/js/jquery-1.11.1.min.js"></script>
+  
   <script src="/static/js/phaser.min.js"></script>
   <script src="/static/js/vue.js"></script>
   <script src="/static/js/run.js"></script>
@@ -36,9 +39,13 @@
         <input  type="button" value="reset" @click="reset">
     </div>
 <script>
-
 var game = new Phaser.Game(600,720,Phaser.AUTO,'container',loadState);
-  var levelNum = 1;            //当前关卡
+  //当前关卡
+  if(sessionStorage.levelNum ){
+    var levelNum = sessionStorage.levelNum;
+  }else{
+    var levelNum = 4;
+  }
   var runObj = null;
   var panda = {
     obj:null,
@@ -88,15 +95,54 @@ var game = new Phaser.Game(600,720,Phaser.AUTO,'container',loadState);
   game.state.add('loadState',loadState);
   game.state.add('state',state);
   //game.state.start('one');
-           
+  
   var vm = new Vue({
     el:'#inp',
     data:{
-      taValue:taValueArr[levelNum],
-      runName:'start',
+      taValue: '',
+      runName: 'start',
+    },
+	created(){	
+	 if(sessionStorage.chapterCode){
+	    //已经登录了，存在sessionStorage.chapterCode，就修改this.taValue为用户已经提交的代码
+	    this.taValue = sessionStorage.chapterCode;
+	 }else{
+	    //没有登录，不存在sessionStorage.chapterCode，就让this.taValue为初始设置值
+	    this.taValue = taValueArr[parseInt(levelNum)];
+	 }
+	   
     },
     methods:{
+	
       start(){
+	    //如果登录了，无论代码是否正确，按下开始执行就保存代码
+        if(sessionStorage.username){
+		     //无论代码是否正确，在按下开始执行的时候就保存代码
+			 $.ajax({
+					 type: "post",
+					 url: "/Info/saveCode",
+					 data: {username: sessionStorage.username, role: sessionStorage.role, chapter: levelNum, chapterCode: this.taValue},
+					 dataType: "json",
+					 success: function(data){
+						if(data.status == '1'){
+							console.log(data.msg); 
+						}                
+					 },
+					 error:function(err){
+					   console.log(err);
+					 }
+			  });	
+		
+		}
+		
+		//如果没有登录，且关卡数大于4关，就要弹出试玩的关卡已结束，跳回首页。
+		if(!sessionStorage.username && levelNum > 4){
+		   alert("你的试玩已经结束啦！现在即将跳回首页，您可以再次选择试玩或者是登录");
+		   window.parent.location = "/";
+		}
+		
+			 
+	  
         if(runOnoff == false){
           num = 0;
           runOnoff = true;
@@ -126,7 +172,16 @@ var game = new Phaser.Game(600,720,Phaser.AUTO,'container',loadState);
       reset(){
         this.taValue = taValueArr[levelNum];
       }
-    }
+    },
+	counted(){
+	  
+       
+	   
+  
+	}
+	
+	
+	
   })
 
 </script>

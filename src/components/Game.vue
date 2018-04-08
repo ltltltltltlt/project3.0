@@ -36,14 +36,80 @@
 export default {
   data(){
     return{
-	  levelNum:1,
+	  //levelNum:1,
       loginReg:true,
       loginShow:false,
       regShow:false,
       canvasHeight:700,
-    
     }
   },
+  computed:{
+     levelNum: function() {
+		 if(sessionStorage.levelNum){
+		  alert(sessionStorage.levelNum);
+		  return sessionStorage.levelNum;
+		 }else{
+		   return 1;
+		 }
+    }
+  },
+    /*levelNum: function(){	
+       var that = this;
+	   //先判断是否有登录
+	   if(sessionStorage.username !== 'null' || sessionStorage.username !== 'undefined'){
+
+			//已登录，就调用后台查询已经保存的关卡数,就跳到保存好的关卡数
+
+            this.$ajax.post('/Info/queryChapter', {
+                          username: sessionStorage.username,
+                          role: sessionStorage.role
+			}, {emulateJSON: true}).then((response) => {
+			if (response.data.status === '1') {
+			   //修改密码成功
+			   alert(JSON.stringify(response.data.msg));
+			   //that.levelNum = response.data.chapterNum;	
+			   //alert(that.levelNum);
+			   //alert(response.data.chapterCode);
+			   sessionStorage.chapterCode = response.data.chapterCode;
+			   alert(sessionStorage.chapterCode);
+			   sessionStorage.levelNum = response.data.chapterNum;
+			   alert(sessionStorage.levelNum);
+			   return response.data.chapterNum;
+			}
+			if (response.data.status === '-1') {
+			  //修改密码失败
+			  alert(JSON.stringify(response.data.msg))
+			}
+		  }).catch((err) => {
+			console.error(err)
+		  })*/			
+			 /*$.ajax({
+				 type: "post",
+				 url: "/Info/queryChapter",
+				 data: {username: sessionStorage.username, role: sessionStorage.role},
+				 dataType: "json",
+				 success: function(data){
+					if(data.status == '1'){
+					  console.log(data.msg);
+					  //that.levelNum = data.chapterNum;	
+					  //alert(that.levelNum);
+					  //alert(data.chapterCode);
+					  sessionStorage.chapterCode = data.chapterCode;
+					  alert(sessionStorage.chapterCode);
+					  sessionStorage.levelNum = that.levelNum;
+					  alert(sessionStorage.levelNum);
+					  return data.chapterNum;
+					  
+					}               
+                 },
+				 error:function(err){
+				   console.log(err);
+				 }
+             });*/	
+	  /* }
+	   
+    }
+  },*/
   methods:{
     login(){
       this.loginShow = true;
@@ -61,10 +127,10 @@ export default {
 
     
   },
+  
   mounted(){
-   
-	
   }
+  
 }
 </script>
 <style scoped>

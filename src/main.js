@@ -10,10 +10,11 @@ import Login from './components/login'
 import PerEdit from './components/perEdit'
 import PerEditPass from './components/perEditPass'
 import Picture from './components/picture'
+import VueResource from 'vue-resource'
 import axios from 'axios'
 Vue.prototype.$ajax = axios
 
-
+Vue.use(VueResource)
 
 Vue.use(Login)
 Vue.use(Reg)
